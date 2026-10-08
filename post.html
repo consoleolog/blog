@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/static/woff2/SUIT.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0;background:#f4f4f2;color:#1f1f1f;font-family:"SUIT","Zen Kaku Gothic New",sans-serif;-webkit-font-smoothing:antialiased;word-break:keep-all}
+body:has([data-root][data-theme="dark"]){background:#121212}
+[data-root]{--card:#f7f7f5;--tape:rgba(0,0,0,.07);--desk:#f4f4f2;--paper:#ffffff;--ink:#1f1f1f;--ink2:#555;--pencil:#999;--rule:#ececec;--margin:#e6e6e6;--hl:oklch(0.5 0.2 264 / .14);--tab:#f1f1ef;--code:#fafafa;--accent:oklch(0.5 0.2 264)}
+[data-root][data-theme="dark"]{--card:#222;--tape:rgba(255,255,255,.1);--desk:#121212;--paper:#1b1b1b;--ink:#ececec;--ink2:#b0b0b0;--pencil:#777;--rule:#262626;--margin:#2e2e2e;--hl:oklch(0.72 0.14 264 / .22);--tab:#161616;--code:#151515;--accent:oklch(0.72 0.14 264)}
+[data-hand]{font-family:"SUIT","Zen Kaku Gothic New",sans-serif;font-weight:700;letter-spacing:-.025em}
+[data-mono]{font-family:"IBM Plex Mono","SUIT",monospace;letter-spacing:0}
+a{color:inherit;text-decoration:none}
+a:hover{color:var(--accent)}
+:focus-visible{outline:2px dashed var(--ink);outline-offset:3px}
+@keyframes hl-draw{from{background-size:0% 30%}to{background-size:100% 30%}}
+[data-hl]{background-image:linear-gradient(var(--hl),var(--hl));background-repeat:no-repeat;background-position:0 62%;background-size:100% 30%;animation:hl-draw .9s cubic-bezier(.6,.1,.3,1) .25s both}
+@media (prefers-reduced-motion:reduce){[data-hl]{animation:none}}
+[data-root] pre{scrollbar-width:thin;scrollbar-color:var(--rule) transparent}
+[data-root] pre::-webkit-scrollbar{height:6px}
+[data-root] pre::-webkit-scrollbar-track{background:transparent;margin:0 16px}
+[data-root] pre::-webkit-scrollbar-thumb{background:transparent;border-bottom:1.5px dashed var(--pencil)}
+[data-root] pre:hover::-webkit-scrollbar-thumb{border-bottom-color:var(--accent)}
+@media (max-width:640px){
+[data-root]{padding:16px 10px 48px!important}
+[data-paper]{padding:24px 20px 88px 44px!important;background-image:linear-gradient(90deg,transparent 31px,var(--margin) 31px,var(--margin) 32px,transparent 32px),repeating-linear-gradient(180deg,transparent 0,transparent 31px,var(--rule) 31px,var(--rule) 32px)!important}
+[data-h1]{font-size:24px!important;line-height:36px!important}
+[data-pnav]{grid-template-columns:minmax(0,1fr)!important;gap:28px!important}
+[data-pnav] a{grid-column:auto!important}
+[data-root] pre{font-size:12px!important;padding:4px 12px 12px!important}
+}
+</style>
+</helmet>
+<div data-root="1" data-theme="{{ theme }}" style="background:var(--desk);color:var(--ink);min-height:100vh;padding:40px 16px 80px;box-sizing:border-box;transition:background .25s">
+
+  <div style="max-width:760px;margin:0 auto 14px;display:flex;justify-content:flex-end;gap:10px;align-items:center;flex-wrap:wrap;font-size:13px">
+    <sc-for list="{{ langs }}" as="l" hint-placeholder-count="3">
+      <button onClick="{{ l.pick }}" style="font:inherit;padding:0 4px;border:0;cursor:pointer;color:var(--ink);background:transparent;opacity:{{ l.op }}" style-hover="color:var(--accent);opacity:1">{{ l.label }}</button>
+    </sc-for>
+    <span style="color:var(--pencil)">|</span>
+    <button onClick="{{ toggleTheme }}" aria-label="{{ t.themeLabel }}" title="{{ t.themeLabel }}" style="font:inherit;display:flex;align-items:center;justify-content:center;width:28px;height:28px;padding:0;border:0;border-radius:50%;background:transparent;color:var(--ink2);cursor:pointer;transition:color .15s,transform .3s" style-hover="color:var(--accent);transform:rotate(-12deg)"><sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg></sc-if><sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg></sc-if></button>
+  </div>
+
+  <div data-paper="1" style="max-width:760px;margin:0 auto;position:relative;background-color:var(--paper);background-image:linear-gradient(90deg,transparent 71px,var(--margin) 71px,var(--margin) 73px,transparent 73px),repeating-linear-gradient(180deg,transparent 0,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-position:0 0,0 8px;padding:40px 40px 96px 104px;box-sizing:border-box;font-size:16px;line-height:32px;box-shadow:0 1px 2px rgba(0,0,0,.06),0 8px 24px -12px rgba(0,0,0,.18);border-radius:2px">
+
+    <sc-if value="{{ nextPost }}" hint-placeholder-val="{{ false }}">
+      <a href="{{ nextPost.href }}" aria-label="{{ t.older }}" title="{{ t.older }}: {{ nextPost.title }}" style="position:absolute;right:0;bottom:0;width:56px;height:56px;background:linear-gradient(315deg,var(--desk) 0 50%,transparent 50%) no-repeat,linear-gradient(135deg,var(--tab) 0 50%,transparent 50%) no-repeat;background-size:100% 100%,100% 100%;filter:drop-shadow(-2px -2px 2px rgba(0,0,0,.12));transition:width .2s,height .2s" style-hover="width:72px;height:72px"></a>
+    </sc-if>
+    <sc-if value="{{ prevPost }}" hint-placeholder-val="{{ false }}">
+      <a href="{{ prevPost.href }}" aria-label="{{ t.newer }}" title="{{ t.newer }}: {{ prevPost.title }}" style="position:absolute;left:0;bottom:0;width:56px;height:56px;background:linear-gradient(45deg,var(--desk) 0 50%,transparent 50%) no-repeat,linear-gradient(225deg,var(--tab) 0 50%,transparent 50%) no-repeat;background-size:100% 100%,100% 100%;filter:drop-shadow(2px -2px 2px rgba(0,0,0,.12));transition:width .2s,height .2s" style-hover="width:72px;height:72px"></a>
+    </sc-if>
+
+    <header style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;min-height:64px">
+      <a href="index.html" data-hand="1" style="font-size:22px;line-height:64px">{{ t.brand }}<span style="color:var(--pencil)">.</span>dev</a>
+      <nav style="display:flex;gap:20px;font-size:15px;color:var(--ink2)">
+        <a href="index.html" style="color:var(--ink);font-weight:700;background:linear-gradient(var(--hl),var(--hl)) no-repeat 0 70%/100% 35%;padding:0 2px">{{ t.nav.posts }}</a>
+        <a href="https://github.com/consoleolog" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+    </header>
+
+    <div style="padding-top:32px;display:flex">
+      <a href="index.html" style="display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 14px 0 10px;font-size:13px;line-height:26px;color:var(--ink2);background:var(--tape);transform:rotate(-2deg);clip-path:polygon(0 8%,4% 0,8% 10%,12% 0,100% 4%,98% 50%,100% 96%,90% 100%,86% 92%,82% 100%,0 96%,3% 50%)" style-hover="color:var(--accent);transform:rotate(0)">← {{ t.back }}</a>
+    </div>
+
+    <sc-if value="{{ ready }}" hint-placeholder-val="{{ true }}">
+      <article>
+        <div style="display:flex;gap:16px;align-items:baseline;flex-wrap:wrap;margin-top:32px">
+          <span data-mono="1" style="font-size:12px;color:var(--pencil)">{{ post.date }}</span>
+          <span style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+            <sc-for list="{{ post.tags }}" as="tg" hint-placeholder-count="2">
+              <a href="index.html" style="font-size:12px;line-height:22px;padding:0 10px;background:var(--tape);color:var(--ink2);transform:rotate(-1.5deg);clip-path:polygon(2% 0,98% 6%,100% 94%,1% 100%)" style-hover="color:var(--accent)">{{ tg }}</a>
+            </sc-for>
+          </span>
+        </div>
+        <h1 data-hand="1" data-h1="1" style="margin:16px 0 16px;font-size:30px;line-height:48px;text-wrap:balance"><span data-hl="1" style="padding:0 2px">{{ post.title }}</span></h1>
+        <p style="margin:0;color:var(--ink2)">{{ post.summary }}</p>
+
+        <div style="margin-top:32px">
+          <sc-for list="{{ post.blocks }}" as="b" hint-placeholder-count="5">
+            <sc-if value="{{ b.isH }}" hint-placeholder-val="{{ false }}">
+              <h2 data-hand="1" style="margin:32px 0 0;font-size:19px;line-height:32px;display:flex;gap:10px;align-items:baseline"><span data-mono="1" style="font-size:12px;font-weight:500;color:var(--accent)">{{ b.num }}</span><span>{{ b.text }}</span></h2>
+            </sc-if>
+            <sc-if value="{{ b.isP }}" hint-placeholder-val="{{ true }}">
+              <p style="margin:0;color:var(--ink);text-wrap:pretty">{{ b.text }}</p>
+            </sc-if>
+            <sc-if value="{{ b.isCode }}" hint-placeholder-val="{{ false }}">
+              <div style="position:relative;margin:24px 0 8px;background:var(--code);border:1px solid var(--rule);box-shadow:0 1px 2px rgba(0,0,0,.05)">
+                <span aria-hidden="true" style="position:absolute;top:-9px;left:50%;width:72px;height:18px;margin-left:-36px;background:var(--hl);transform:rotate(-2deg);backdrop-filter:blur(1px)"></span>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 10px 0 16px">
+                  <span data-mono="1" style="font-size:11px;line-height:24px;color:var(--pencil)">{{ b.lang }}</span>
+                  <button type="button" onClick="{{ b.copy }}" aria-label="{{ t.copy }}" style="font:inherit;font-size:12px;line-height:22px;padding:0 8px;border:0;background:{{ b.copyBg }};color:{{ b.copyColor }};cursor:pointer;transition:background .15s,color .15s" style-hover="color:var(--accent)">{{ b.copyLabel }}</button>
+                </div>
+                <pre data-mono="1" style="margin:0;padding:4px 16px 14px;font-size:13px;line-height:24px;overflow-x:auto;color:var(--ink)">{{ b.text }}</pre>
+              </div>
+            </sc-if>
+          </sc-for>
+        </div>
+      </article>
+    </sc-if>
+
+    <sc-if value="{{ notFound }}" hint-placeholder-val="{{ false }}">
+      <p style="margin:32px 0 0;color:var(--ink2)">{{ t.notFound }}</p>
+    </sc-if>
+
+    <nav data-pnav="1" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;margin-top:64px;font-size:15px">
+      <sc-if value="{{ prevPost }}" hint-placeholder-val="{{ true }}">
+        <a href="{{ prevPost.href }}" style="grid-column:1;position:relative;display:flex;flex-direction:column;padding:16px 18px 18px;background:var(--card);border:1px solid var(--rule);box-shadow:0 1px 1px rgba(0,0,0,.05),0 6px 12px -8px rgba(0,0,0,.25);transform:rotate(-1deg);transition:transform .2s" style-hover="transform:rotate(0) translateY(-3px)">
+          <span aria-hidden="true" style="position:absolute;top:-8px;left:20px;width:56px;height:16px;background:var(--tape);transform:rotate(-4deg)"></span>
+          <span style="font-size:12px;line-height:24px;color:var(--pencil)">← {{ t.newer }}</span>
+          <span data-hand="1" style="font-size:15px;line-height:24px">{{ prevPost.title }}</span>
+        </a>
+      </sc-if>
+      <sc-if value="{{ nextPost }}" hint-placeholder-val="{{ true }}">
+        <a href="{{ nextPost.href }}" style="grid-column:2;position:relative;display:flex;flex-direction:column;align-items:flex-end;text-align:right;padding:16px 18px 18px;background:var(--card);border:1px solid var(--rule);box-shadow:0 1px 1px rgba(0,0,0,.05),0 6px 12px -8px rgba(0,0,0,.25);transform:rotate(1deg);transition:transform .2s" style-hover="transform:rotate(0) translateY(-3px)">
+          <span aria-hidden="true" style="position:absolute;top:-8px;right:20px;width:56px;height:16px;background:var(--tape);transform:rotate(4deg)"></span>
+          <span style="font-size:12px;line-height:24px;color:var(--pencil)">{{ t.older }} →</span>
+          <span data-hand="1" style="font-size:15px;line-height:24px">{{ nextPost.title }}</span>
+        </a>
+      </sc-if>
+    </nav>
+
+    <footer style="margin-top:64px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:13px;color:var(--pencil)">
+      <span>© 2026 {{ t.name }}</span>
+      <a href="mailto:leopportunity5@gmail.com">leopportunity5@gmail.com</a>
+    </footer>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const LANGS = [['ko','한국어'],['en','English'],['ja','日本語']];
+const T = {
+  ko: { brand:'안채령', name:'안채령', nav:{ posts:'글', resume:'이력서' }, back:'목록으로', copy:'복사', copied:'복사됨 ✓', newer:'최신 글', older:'이전 글', notFound:'글을 찾을 수 없어요.', dark:'밤 모드', light:'낮 모드' },
+  en: { brand:'chaeryeong', name:'Chaeryeong Ahn', nav:{ posts:'Posts', resume:'Resume' }, back:'All posts', copy:'Copy', copied:'Copied ✓', newer:'Newer', older:'Older', notFound:'Post not found.', dark:'Night', light:'Day' },
+  ja: { brand:'chaeryeong', name:'アン・チェリョン', nav:{ posts:'記事', resume:'履歴書' }, back:'一覧へ', copy:'コピー', copied:'コピー済み ✓', newer:'新しい記事', older:'以前の記事', notFound:'記事が見つかりません。', dark:'夜モード', light:'昼モード' },
+};
+const HREF = id => 'post.html?id=' + id;
+class Component extends DCLogic {
+  state = { theme: 'light', lang: 'ko', all: null, copied: -1 };
+  copyCode(i, text) {
+    const done = () => { this.setState({ copied: i }); clearTimeout(this.ct); this.ct = setTimeout(() => this.setState({ copied: -1 }), 1600); };
+    if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, () => { this.fallbackCopy(text); done(); });
+    else { this.fallbackCopy(text); done(); }
+  }
+  fallbackCopy(text) {
+    const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch (e) {} ta.remove();
+  }
+  componentWillUnmount() { clearTimeout(this.ct); }
+  componentDidMount() {
+    try {
+      const th = localStorage.getItem('resume-theme'); const l = localStorage.getItem('resume-lang');
+      const s = {}; if (th) s.theme = th; if (l && T[l]) s.lang = l; this.setState(s);
+    } catch (e) {}
+    import('./posts.js').then(m => this.setState({ all: m.POSTS }, () => {
+      const p = this.current(); if (!p) return;
+      try { const read = JSON.parse(localStorage.getItem('blog-read') || '[]'); if (!read.includes(p.id)) localStorage.setItem('blog-read', JSON.stringify([...read, p.id])); } catch (e) {}
+    }));
+  }
+  componentDidUpdate() {
+    document.documentElement.lang = this.state.lang;
+    const p = this.current(); if (p) document.title = p[this.state.lang].title;
+  }
+  sorted() { return this.state.all ? [...this.state.all].sort((a, b) => b.date.localeCompare(a.date)) : []; }
+  current() {
+    const list = this.sorted(); if (!list.length) return null;
+    const id = new URLSearchParams(location.search).get('id');
+    return id ? list.find(p => p.id === id) || null : list[0];
+  }
+  renderVals() {
+    const { theme, lang, all } = this.state;
+    const t = { ...T[lang], themeLabel: theme === 'dark' ? T[lang].light : T[lang].dark };
+    const list = this.sorted();
+    const cur = this.current();
+    const i = cur ? list.indexOf(cur) : -1;
+    const link = p => p ? { title: p[lang].title, href: HREF(p.id) } : null;
+    let h = 0;
+    const post = cur ? {
+      date: cur.date, title: cur[lang].title, summary: cur[lang].summary, tags: cur.tags,
+      blocks: cur[lang].body.map(b => b[0] === 'h'
+        ? { isH: true, num: String(++h).padStart(2, '0'), text: b[1] }
+        : b[0] === 'code' ? (() => { const bi = cur[lang].body.indexOf(b); const on = this.state.copied === bi; return { isCode: true, lang: b[1], text: b[2],
+            copy: () => this.copyCode(bi, b[2]), copyLabel: on ? t.copied : t.copy,
+            copyBg: on ? 'var(--hl)' : 'transparent', copyColor: on ? 'var(--accent)' : 'var(--pencil)' }; })() : { isP: true, text: b[1] }),
+    } : null;
+    return {
+      t, theme, isDark: theme === 'dark', isLight: theme !== 'dark', post, ready: !!cur, notFound: !!all && !cur,
+      prevPost: i > 0 ? link(list[i - 1]) : null,
+      nextPost: i >= 0 && i < list.length - 1 ? link(list[i + 1]) : null,
+      langs: LANGS.map(([id, label]) => ({ label, op: id === lang ? 1 : 0.5,
+        pick: () => { this.setState({ lang: id }); try { localStorage.setItem('resume-lang', id); } catch (e) {} } })),
+      toggleTheme: () => { const n = theme === 'dark' ? 'light' : 'dark'; this.setState({ theme: n }); try { localStorage.setItem('resume-theme', n); } catch (e) {} },
+    };
+  }
+}
+</script>
+</body>
+</html>

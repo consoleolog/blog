@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sun-typeface/SUIT@2/fonts/static/woff2/SUIT.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+body{margin:0;background:#f4f4f2;color:#1f1f1f;font-family:"SUIT","Zen Kaku Gothic New",sans-serif;-webkit-font-smoothing:antialiased;word-break:keep-all}
+body:has([data-root][data-theme="dark"]){background:#121212}
+[data-root]{--desk:#f4f4f2;--paper:#ffffff;--ink:#1f1f1f;--ink2:#555;--pencil:#999;--rule:#ececec;--margin:#e6e6e6;--hl:oklch(0.5 0.2 264 / .14);--hl2:oklch(0.5 0.2 264 / .14);--red:#1f1f1f;--hole:#f4f4f2}
+[data-root][data-theme="dark"]{--desk:#121212;--paper:#1b1b1b;--ink:#ececec;--ink2:#b0b0b0;--pencil:#777;--rule:#262626;--margin:#2e2e2e;--hl:oklch(0.72 0.14 264 / .22);--hl2:oklch(0.72 0.14 264 / .22);--red:#ececec;--hole:#121212}
+[data-hand]{font-family:"SUIT","Zen Kaku Gothic New",sans-serif;font-weight:700;letter-spacing:-.025em}
+[data-mono]{font-family:"IBM Plex Mono","SUIT",monospace;letter-spacing:0}
+a{color:inherit;text-decoration:none}
+a:hover{color:var(--accent)}
+:focus-visible{outline:2px dashed var(--red);outline-offset:3px}
+[data-root]{--note:#fbf1b6;--note-ink:#5a5232;--accent:oklch(0.5 0.2 264)}
+[data-root][data-theme="dark"]{--note:#4a4530;--note-ink:#eee6c2;--accent:oklch(0.72 0.14 264)}
+@keyframes hl-draw{from{background-size:0% 30%}to{background-size:100% 30%}}
+[data-hl]{background-image:linear-gradient(var(--hl),var(--hl));background-repeat:no-repeat;background-position:0 62%;background-size:100% 30%;animation:hl-draw .9s cubic-bezier(.6,.1,.3,1) .25s both}
+[data-uline]{background-image:linear-gradient(currentColor,currentColor);background-repeat:no-repeat;background-position:0 88%;background-size:0% 1.5px;transition:background-size .35s ease}
+[data-post]:hover [data-uline],[data-post]:focus-visible [data-uline]{color:var(--accent)}
+[data-uline]{transition:background-size .35s ease,color .2s ease}
+[data-root]{--pin:#dce8fb;--pin-ink:#2d4a7a;--tab:#f1f1ef}
+[data-root][data-theme="dark"]{--pin:#2b3a55;--pin-ink:#d6e2f7;--tab:#161616}
+[data-search]::placeholder{color:currentColor;opacity:.55}
+[data-search]::-webkit-search-cancel-button{display:none}
+@media (max-width:880px){[data-tabs]{display:none!important}[data-mtools]{display:flex!important}}
+@media (max-width:640px){
+[data-root]{padding:16px 10px 48px!important}
+[data-paper]{padding:24px 20px 72px 44px!important;background-image:linear-gradient(90deg,transparent 31px,var(--margin) 31px,var(--margin) 32px,transparent 32px),repeating-linear-gradient(180deg,transparent 0,transparent 31px,var(--rule) 31px,var(--rule) 32px)!important}
+[data-mnote]{position:relative!important;left:auto!important;top:auto!important;display:inline-block!important;width:auto!important;padding:0 8px!important;line-height:20px!important;margin-bottom:4px;transform:rotate(-2deg)!important}
+[data-h1]{font-size:26px!important;line-height:40px!important}
+[data-prow]{flex-direction:column!important;gap:0!important}
+[data-prow] [data-uline]{font-size:18px!important}
+}
+@media (prefers-reduced-motion:reduce){[data-hl]{animation:none}[data-uline]{transition:none}}
+</style>
+</helmet>
+<div data-root="1" data-theme="{{ theme }}" style="background:var(--desk);color:var(--ink);min-height:100vh;padding:40px 16px 80px;box-sizing:border-box;transition:background .25s">
+
+  <div style="max-width:760px;margin:0 auto 14px;display:flex;justify-content:flex-end;gap:10px;align-items:center;flex-wrap:wrap;font-size:13px">
+    <sc-for list="{{ langs }}" as="l" hint-placeholder-count="3">
+      <button onClick="{{ l.pick }}" style="font:inherit;padding:0 4px;border:0;cursor:pointer;color:var(--ink);background:{{ l.bg }};opacity:{{ l.op }}" style-hover="color:var(--accent);opacity:1">{{ l.label }}</button>
+    </sc-for>
+    <span style="color:var(--pencil)">|</span>
+    <button onClick="{{ toggleTheme }}" aria-label="{{ t.themeLabel }}" title="{{ t.themeLabel }}" style="font:inherit;display:flex;align-items:center;justify-content:center;width:28px;height:28px;padding:0;border:0;border-radius:50%;background:transparent;color:var(--ink2);cursor:pointer;transition:color .15s,transform .3s" style-hover="color:var(--accent);transform:rotate(-12deg)"><sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg></sc-if><sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg></sc-if></button>
+  </div>
+
+  <div data-paper="1" style="max-width:760px;margin:0 auto;position:relative;background-color:var(--paper);background-image:linear-gradient(90deg,transparent 71px,var(--margin) 71px,var(--margin) 73px,transparent 73px),repeating-linear-gradient(180deg,transparent 0,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-position:0 0,0 8px;padding:40px 40px 64px 104px;box-sizing:border-box;font-size:16px;line-height:32px;box-shadow:0 1px 2px rgba(0,0,0,.06),0 8px 24px -12px rgba(0,0,0,.18);border-radius:2px">
+
+    <div data-tabs="1" style="position:absolute;left:100%;top:168px;display:flex;flex-direction:column;gap:4px">
+      <button data-search-tab="1" onClick="{{ toggleSearch }}" aria-expanded="{{ searchOpen }}" aria-label="{{ t.searchTab }}" style="font:inherit;font-size:12px;line-height:1;writing-mode:vertical-rl;padding:12px 7px;border:0;border-radius:0 6px 6px 0;cursor:pointer;background:{{ searchTabBg }};color:{{ searchTabColor }};margin-left:{{ searchTabMl }};box-shadow:1px 1px 2px -1px rgba(0,0,0,.1);margin-bottom:8px" style-hover="color:var(--accent)">⌕ {{ t.searchTab }}</button>
+      <sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="5">
+        <button onClick="{{ tb.pick }}" style="font:inherit;font-size:12px;line-height:1;writing-mode:vertical-rl;padding:12px 7px;border:0;border-radius:0 6px 6px 0;cursor:pointer;background:{{ tb.bg }};color:{{ tb.color }};margin-left:{{ tb.ml }};box-shadow:{{ tb.shadow }};transition:margin .15s,background .15s" style-hover="color:var(--accent)">{{ tb.label }}</button>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{ searchOpen }}" hint-placeholder-val="{{ false }}">
+      <div data-tabs="1" data-search-slip="1" style="position:absolute;right:12px;top:160px;width:240px;z-index:2;padding:10px 14px 12px;box-sizing:border-box;background:var(--note);color:var(--note-ink);transform:rotate(1deg);box-shadow:0 1px 1px rgba(0,0,0,.08),0 8px 16px -8px rgba(0,0,0,.3);display:flex;flex-direction:column;gap:2px">
+        <span style="font-size:12px;line-height:20px;font-weight:700">{{ t.searchTab }}</span>
+        <div style="display:flex;gap:8px;align-items:baseline">
+          <input ref="{{ searchRef }}" data-search="1" type="search" value="{{ q }}" onInput="{{ onSearch }}" onKeyDown="{{ onSearchKey }}" placeholder="{{ t.search }}" aria-label="{{ t.search }}" style="flex:1;min-width:0;font:inherit;font-size:14px;line-height:28px;height:28px;padding:0;border:0;border-bottom:1.5px dashed currentColor;background:transparent;color:inherit;outline:none;-webkit-appearance:none">
+          <sc-if value="{{ hasQ }}" hint-placeholder-val="{{ false }}">
+            <button type="button" onClick="{{ clearQ }}" style="font:inherit;font-size:12px;padding:0;border:0;background:transparent;color:inherit;opacity:.7;cursor:pointer;white-space:nowrap" style-hover="opacity:1">{{ t.erase }}</button>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+
+    <span aria-hidden="true" style="position:absolute;left:0;right:0;bottom:20px;text-align:center;font-size:12px;color:var(--pencil);pointer-events:none" data-mono="1">— {{ pageNo }} —</span>
+    <sc-if value="{{ hasNext }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ next }}" aria-label="{{ t.next }}" title="{{ t.next }}" style="position:absolute;right:0;bottom:0;width:56px;height:56px;padding:0;border:0;cursor:pointer;background:linear-gradient(315deg,var(--desk) 0 50%,transparent 50%) no-repeat,linear-gradient(135deg,var(--tab) 0 50%,transparent 50%) no-repeat;background-size:100% 100%,100% 100%;filter:drop-shadow(-2px -2px 2px rgba(0,0,0,.12));transition:width .2s,height .2s" style-hover="width:72px;height:72px"></button>
+    </sc-if>
+    <sc-if value="{{ hasPrev }}" hint-placeholder-val="{{ false }}">
+      <button onClick="{{ prev }}" aria-label="{{ t.prev }}" title="{{ t.prev }}" style="position:absolute;left:0;bottom:0;width:56px;height:56px;padding:0;border:0;cursor:pointer;background:linear-gradient(45deg,var(--desk) 0 50%,transparent 50%) no-repeat,linear-gradient(225deg,var(--tab) 0 50%,transparent 50%) no-repeat;background-size:100% 100%,100% 100%;filter:drop-shadow(2px -2px 2px rgba(0,0,0,.12));transition:width .2s,height .2s" style-hover="width:72px;height:72px"></button>
+    </sc-if>
+
+    <header style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;min-height:64px">
+      <a href="#" data-hand="1" style="font-size:22px;line-height:64px">{{ t.brand }}<span style="color:var(--pencil)">.</span>dev</a>
+      <nav style="display:flex;gap:20px;font-size:15px;color:var(--ink2)">
+        <a href="#" style="color:var(--ink);font-weight:700">{{ t.nav.posts }}</a>
+        <a href="https://github.com/consoleolog" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+    </header>
+
+    <section style="padding:32px 0 32px">
+      <h1 data-hand="1" data-h1="1" style="margin:0;font-size:32px;font-weight:700;line-height:64px;color:var(--ink);text-wrap:balance"><span data-hl="1" style="padding:0 4px">{{ t.headline }}</span></h1>
+      <p style="margin:0;color:var(--ink2)">{{ t.intro }}</p>
+    </section>
+
+    <div data-mtools="1" style="display:none;flex-direction:column;gap:12px;margin-bottom:16px">
+      <div style="display:flex;flex-wrap:wrap;gap:6px 6px;align-items:center;padding:4px 2px">
+        <button data-search-tab="1" onClick="{{ toggleSearch }}" aria-expanded="{{ searchOpen }}" style="font:inherit;font-size:13px;line-height:28px;padding:0 12px;border:0;border-radius:4px;cursor:pointer;white-space:nowrap;background:{{ searchTabBg }};color:{{ searchTabColor }};box-shadow:1px 1px 2px -1px rgba(0,0,0,.15)">⌕ {{ t.searchTab }}</button>
+        
+        <sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="5">
+          <button onClick="{{ tb.pick }}" style="font:inherit;font-size:13px;line-height:28px;padding:0 12px;border:0;border-radius:4px;cursor:pointer;white-space:nowrap;background:{{ tb.bg }};color:{{ tb.color }};box-shadow:{{ tb.shadow }}">{{ tb.label }}</button>
+        </sc-for>
+      </div>
+      <sc-if value="{{ searchOpen }}" hint-placeholder-val="{{ false }}">
+        <div data-search-slip="1" style="padding:8px 14px 10px;background:var(--note);color:var(--note-ink);transform:rotate(-.6deg);box-shadow:0 1px 1px rgba(0,0,0,.08),0 8px 16px -8px rgba(0,0,0,.3);display:flex;gap:8px;align-items:baseline">
+          <input ref="{{ mSearchRef }}" data-search="1" type="search" value="{{ q }}" onInput="{{ onSearch }}" onKeyDown="{{ onSearchKey }}" placeholder="{{ t.search }}" aria-label="{{ t.search }}" style="flex:1;min-width:0;font:inherit;font-size:16px;line-height:28px;height:28px;padding:0;border:0;border-bottom:1.5px dashed currentColor;background:transparent;color:inherit;outline:none;-webkit-appearance:none">
+          <sc-if value="{{ hasQ }}" hint-placeholder-val="{{ false }}">
+            <button type="button" onClick="{{ clearQ }}" style="font:inherit;font-size:13px;padding:0;border:0;background:transparent;color:inherit;opacity:.7;cursor:pointer;white-space:nowrap">{{ t.erase }}</button>
+          </sc-if>
+        </div>
+      </sc-if>
+    </div>
+
+
+    <div style="display:flex;justify-content:flex-end;align-items:baseline;gap:12px;min-height:32px">
+      <span style="font-size:14px;color:var(--pencil)">{{ countLabel }}</span>
+    </div>
+
+    <sc-if value="{{ pinned }}" hint-placeholder-val="{{ false }}">
+      <div style="position:relative;margin-top:32px">
+        <span aria-hidden="true" data-mnote="1" style="position:absolute;left:-98px;top:2px;width:58px;padding:6px 4px 8px;box-sizing:border-box;text-align:center;font-size:12px;line-height:16px;font-weight:700;background:var(--pin);color:var(--pin-ink);transform:rotate(4deg);box-shadow:0 1px 1px rgba(0,0,0,.08),0 4px 8px -4px rgba(0,0,0,.25);clip-path:polygon(0 0,100% 0,100% 82%,84% 100%,0 100%)">PIN</span>
+        <a href="{{ pinned.href }}" onClick="{{ pinned.open }}" data-post="1" style="display:flex;flex-direction:column;color:var(--ink)" style-hover="color:var(--ink)">
+          <span data-prow="1" style="display:flex;justify-content:space-between;gap:16px;align-items:baseline">
+            <span style="display:flex;gap:8px;align-items:baseline;min-width:0"><span data-hand="1" data-uline="1" style="font-size:20px;line-height:32px">{{ pinned.title }}</span><sc-if value="{{ pinned.read }}" hint-placeholder-val="{{ false }}"><span title="{{ t.readHint }}" style="font-size:14px;color:var(--pencil);flex-shrink:0">✓</span></sc-if></span>
+            <span data-mono="1" style="font-size:12px;color:var(--pencil);white-space:nowrap;display:flex;gap:6px">
+              <span>{{ pinned.date }}</span>
+            </span>
+          </span>
+          <span style="color:var(--ink2)">{{ pinned.summary }}</span>
+        </a>
+      </div>
+    </sc-if>
+
+    <div ref="{{ flipRef }}" style="transform-origin:0 50%">
+    <ol style="list-style:none;margin:32px 0 0;padding:0;display:flex;flex-direction:column">
+      <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+        <li style="color:var(--pencil);padding-bottom:32px">{{ t.empty }}</li>
+      </sc-if>
+      <sc-for list="{{ rows }}" as="p" hint-placeholder-count="3">
+        <sc-if value="{{ p.isYear }}" hint-placeholder-val="{{ false }}">
+          <li aria-hidden="true" style="display:flex;align-items:center;gap:12px;height:32px;font-size:12px;color:var(--pencil)" data-mono="1"><span>{{ p.year }}</span><span style="flex:1;border-top:1.5px dashed var(--rule);filter:brightness(.85)"></span></li>
+        </sc-if>
+        <sc-if value="{{ p.isPost }}" hint-placeholder-val="{{ true }}">
+        <li style="padding-bottom:32px;position:relative">
+          <sc-if value="{{ p.isNew }}" hint-placeholder-val="{{ false }}">
+            <span aria-hidden="true" data-mnote="1" style="position:absolute;left:-98px;top:2px;width:58px;padding:6px 4px 8px;box-sizing:border-box;text-align:center;font-size:12px;line-height:16px;font-weight:700;background:var(--note);color:var(--note-ink);transform:rotate(-5deg);box-shadow:0 1px 1px rgba(0,0,0,.08),0 4px 8px -4px rgba(0,0,0,.25);clip-path:polygon(0 0,100% 0,100% 82%,84% 100%,0 100%)">{{ t.newNote }}</span>
+          </sc-if>
+          <a href="{{ p.href }}" onClick="{{ p.open }}" data-post="1" style="display:flex;flex-direction:column;color:var(--ink)" style-hover="color:var(--ink)">
+            <span data-prow="1" style="display:flex;justify-content:space-between;gap:16px;align-items:baseline">
+              <span style="display:flex;gap:8px;align-items:baseline;min-width:0"><span data-hand="1" data-uline="1" style="font-size:20px;line-height:32px">{{ p.title }}</span><sc-if value="{{ p.read }}" hint-placeholder-val="{{ false }}"><span title="{{ t.readHint }}" style="font-size:14px;color:var(--pencil);flex-shrink:0">✓</span></sc-if></span>
+              <span data-mono="1" style="font-size:12px;color:var(--pencil);white-space:nowrap;display:flex;gap:6px">
+                <span>{{ p.date }}</span>
+              </span>
+            </span>
+            <span style="color:var(--ink2)">{{ p.summary }}</span>
+            <span style="display:flex;gap:12px;flex-wrap:wrap">
+              <sc-for list="{{ p.tagItems }}" as="tg" hint-placeholder-count="2">
+                <span onClick="{{ tg.pick }}" style="font-size:14px;color:var(--pencil);cursor:pointer" style-hover="color:var(--accent)">#{{ tg.label }}</span>
+              </sc-for>
+            </span>
+          </a>
+        </li>
+        </sc-if>
+      </sc-for>
+    </ol>
+    </div>
+
+    <footer style="margin-top:64px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:13px;color:var(--pencil)">
+      <span>© 2026 {{ t.name }}</span>
+      <a href="mailto:leopportunity5@gmail.com">leopportunity5@gmail.com</a>
+    </footer>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;perPage&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:10,&quot;min&quot;:1,&quot;max&quot;:20,&quot;tsType&quot;:&quot;number&quot;}}">
+const LANGS = [['ko','한국어'],['en','English'],['ja','日本語']];
+const T = {
+  ko: { brand:'안채령', name:'안채령', nav:{ posts:'글', resume:'이력서' }, headline:'한 줄의 무게', intro:'무겁게 고민하고, 가볍게 남깁니다.', all:'전체', prev:'이전 쪽', next:'다음 쪽', posts:n => '총 ' + n + '장', dark:'밤 모드', light:'낮 모드', newNote:'NEW', readHint:'읽은 글', pageLabel:'쪽 넘기기', search:'무엇을 찾아볼까요?', erase:'지우개', searchTab:'찾기', empty:'찾는 글이 없어요.', edited:'수정' },
+  en: { brand:'chaeryeong', name:'Chaeryeong Ahn', nav:{ posts:'Posts', resume:'Resume' }, headline:'The weight of a single line', intro:'Think it through heavily. Write it down lightly.', all:'All', prev:'Previous page', next:'Next page', posts:n => n + (n === 1 ? ' page' : ' pages'), dark:'Night', light:'Day', newNote:'NEW', readHint:'Read', pageLabel:'Pages', search:'What are you looking for?', erase:'Erase', searchTab:'Search', empty:'No posts found.', edited:'edited' },
+  ja: { brand:'chaeryeong', name:'アン・チェリョン', nav:{ posts:'記事', resume:'履歴書' }, headline:'一行の重み', intro:'重く考えて、軽く残します。', all:'すべて', prev:'前のページ', next:'次のページ', posts:n => '全' + n + 'ページ', dark:'夜モード', light:'昼モード', newNote:'NEW', readHint:'既読', pageLabel:'ページ送り', search:'何を探しますか？', erase:'消しゴム', searchTab:'検索', empty:'該当する記事がありません。', edited:'更新' },
+};
+class Component extends DCLogic {
+  state = { tag: '', q: '', searchOpen: false, theme: 'light', lang: 'ko', page: 1, all: [], read: [] };
+  searchRef = React.createRef();
+  mSearchRef = React.createRef();
+  focusSearch() { const el = [this.searchRef.current, this.mSearchRef.current].find(e => e && e.offsetParent); if (el) el.focus(); }
+  flipRef = React.createRef();
+  componentDidMount() {
+    try {
+      const th = localStorage.getItem('resume-theme'); const l = localStorage.getItem('resume-lang');
+      const s = {}; if (th) s.theme = th; if (l && T[l]) s.lang = l;
+      s.read = JSON.parse(localStorage.getItem('blog-read') || '[]'); this.setState(s);
+    } catch (e) {}
+    import('./posts.js').then(m => this.setState({ all: m.POSTS }));
+    this.onDocDown = e => {
+      if (!this.state.searchOpen) return;
+      if (e.target.closest && e.target.closest('[data-search-slip],[data-search-tab]')) return;
+      this.setState({ searchOpen: false });
+    };
+    document.addEventListener('pointerdown', this.onDocDown);
+  }
+  componentWillUnmount() { document.removeEventListener('pointerdown', this.onDocDown); }
+  componentDidUpdate() { document.documentElement.lang = this.state.lang; }
+  setTag(t) { this.setState({ tag: t, page: 1 }); }
+  goPage(n) {
+    const el = this.flipRef.current;
+    const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const fwd = n > this.state.page;
+    if (!el || !el.animate || reduce) { this.setState({ page: n }); return; }
+    const P = 'perspective(1400px) ';
+    el.animate([{ transform: P + 'rotateY(0)', opacity: 1 }, { transform: P + (fwd ? 'rotateY(-35deg)' : 'rotateY(35deg)'), opacity: 0 }], { duration: 220, easing: 'ease-in', fill: 'forwards' })
+      .finished.then(() => {
+        this.setState({ page: n }, () => {
+          el.animate([{ transform: P + (fwd ? 'rotateY(25deg)' : 'rotateY(-25deg)'), opacity: 0 }, { transform: P + 'rotateY(0)', opacity: 1 }], { duration: 280, easing: 'ease-out', fill: 'forwards' });
+        });
+      });
+  }
+  markRead(id) {
+    if (this.state.read.includes(id)) return;
+    const read = [...this.state.read, id]; this.setState({ read });
+    try { localStorage.setItem('blog-read', JSON.stringify(read)); } catch (e) {}
+  }
+  renderVals() {
+    const { tag, theme, lang } = this.state;
+    const PER = this.props.perPage ?? 10;
+    const t = { ...T[lang], themeLabel: theme === 'dark' ? T[lang].light : T[lang].dark };
+    const all = [...this.state.all].sort((a, b) => b.date.localeCompare(a.date));
+    const tags = [...new Set(all.flatMap(p => p.tags))];
+    const q = this.state.q.trim().toLowerCase();
+    const match = p => (!tag || p.tags.includes(tag)) && (!q || (p[lang].title + ' ' + p[lang].summary + ' ' + p.tags.join(' ')).toLowerCase().includes(q));
+    const pin = all.find(p => p.pinned && match(p));
+    const filtered = all.filter(p => !p.pinned && match(p));
+    const total = Math.max(1, Math.ceil(filtered.length / PER));
+    const page = Math.min(this.state.page, total);
+    const newest = all[0] && all[0].id;
+    const view = p => ({
+      isPost: true, isNew: p.id === newest, read: this.state.read.includes(p.id), open: () => this.markRead(p.id),
+      date: p.date, title: p[lang].title, summary: p[lang].summary, href: 'post.html?id=' + p.id,
+      tagItems: p.tags.map(x => ({ label: x, pick: e => { e.preventDefault(); e.stopPropagation(); this.setTag(tag === x ? '' : x); } })),
+    });
+    const rows = []; let yr = '';
+    filtered.slice((page - 1) * PER, page * PER).forEach(p => {
+      const y = p.date.slice(0, 4);
+      if (y !== yr) { rows.push({ isYear: true, year: y }); yr = y; }
+      rows.push(view(p));
+    });
+    const chip = (label, val) => {
+      const on = tag === val;
+      return { label, pick: () => this.setTag(on && val ? '' : val), color: on ? 'var(--ink)' : 'var(--pencil)', border: on ? 'var(--red)' : 'transparent' };
+    };
+    return {
+      t, theme, isDark: theme === 'dark', isLight: theme !== 'dark', rows, q: this.state.q, pageNo: page,
+      pinned: pin ? view(pin) : null,
+      empty: !filtered.length && !pin,
+      onSearch: e => this.setState({ q: e.target.value, page: 1 }),
+      hasQ: !!this.state.q, clearQ: () => this.setState({ q: '', page: 1 }, () => this.focusSearch()),
+      searchRef: this.searchRef, mSearchRef: this.mSearchRef, searchOpen: this.state.searchOpen,
+      toggleSearch: () => this.setState(s => ({ searchOpen: !s.searchOpen }), () => this.state.searchOpen && this.focusSearch()),
+      onSearchKey: e => { if (e.key === 'Escape') this.setState({ searchOpen: false }); },
+      searchTabBg: this.state.searchOpen || this.state.q ? 'var(--note)' : 'var(--tab)',
+      searchTabColor: this.state.searchOpen || this.state.q ? 'var(--note-ink)' : 'var(--pencil)',
+      searchTabMl: this.state.searchOpen ? '0' : '-3px',
+      countLabel: t.posts(filtered.length + (pin ? 1 : 0)),
+      tabs: [{ v: '', label: t.all }, ...tags.map(x => ({ v: x, label: x }))].map(({ v, label }) => { const on = tag === v; return { label,
+        pick: () => this.setTag(on && v ? '' : v),
+        bg: on ? 'var(--paper)' : 'var(--tab)', color: on ? 'var(--ink)' : 'var(--pencil)',
+        ml: on ? '0' : '-3px', shadow: on ? '2px 1px 3px -1px rgba(0,0,0,.12)' : '1px 1px 2px -1px rgba(0,0,0,.1)' }; }),
+      filters: [chip(t.all, ''), ...tags.map(x => chip('#' + x, x))],
+      showPager: total > 1,
+      pages: Array.from({ length: total }, (_, i) => { const on = i + 1 === page; return { n: i + 1, go: () => this.goPage(i + 1), color: on ? 'var(--ink)' : 'var(--pencil)', border: on ? 'var(--red)' : 'transparent' }; }),
+      prev: () => page > 1 && this.goPage(page - 1),
+      next: () => page < total && this.goPage(page + 1),
+      prevDisabled: page <= 1, nextDisabled: page >= total,
+      hasPrev: page > 1, hasNext: page < total,
+      langs: LANGS.map(([id, label]) => ({ label,
+        pick: () => { this.setState({ lang: id }); try { localStorage.setItem('resume-lang', id); } catch (e) {} },
+        bg: 'transparent', op: id === lang ? 1 : 0.5 })),
+      toggleTheme: () => { const n = theme === 'dark' ? 'light' : 'dark'; this.setState({ theme: n }); try { localStorage.setItem('resume-theme', n); } catch (e) {} },
+    };
+  }
+}
+</script>
+</body>
+</html>
